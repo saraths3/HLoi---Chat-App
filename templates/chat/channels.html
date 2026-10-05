@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}HLoi — Channels{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+<link rel="stylesheet" href="{% static 'css/chat/channels.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<div class="friends-workspace">
+
+    <!-- View Header -->
+    <header class="view-header">
+        <div class="header-titles">
+            <h1 class="view-title">Channels</h1>
+            <span class="view-subtitle">Discover community rooms and ongoing group conversations</span>
+        </div>
+        <div class="header-actions">
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="channel" value="create">
+                <button type="submit" class="btn-search-link">
+                    <span class="material-symbols-outlined">add</span>
+                    <span>Create Channel</span>
+                </button>
+            </form>
+        </div>
+    </header>
+
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="glass-alert">
+                    <span class="material-symbols-outlined alert-icon">info</span>
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Added My Channels section for channels managed by the current user -->
+    {% if my_channels %}
+        <!-- Added section heading for owned channels -->
+        <h2 class="section-title">My Channels</h2>
+        <div class="friends-grid">
+            {% for channel in my_channels %}
+                <div class="friend-card">
+                    <div class="avatar-container">
+                        <div class="friend-avatar channel-avatar-placeholder">
+                            <span class="material-symbols-outlined">tag</span>
+                        </div>
+                    </div>
+                    <div class="friend-info">
+                        <h3 class="friend-name">{{ channel.name }}</h3>
+                        <span class="friend-username">Created by @{{ channel.admin.user.username }}</span>
+                    </div>
+                    <a href="{% url 'channel_chat_page' channel.id %}" class="btn-chat" title="Open Channel">
+                        <span class="material-symbols-outlined">login</span>
+                        <span>Open</span>
+                    </a>
+                    <!-- Form for deleting owned channel -->
+                    <form action="{% url 'channel_deletion' channel.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="channel_delete_request">
+                        <button type="submit" class="btn-chat" title="Delete" style="background:none; border:none; padding:0; cursor:pointer;">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button> 
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Joined Channels Section -->
+    {% if channels %}
+        <!-- Added section title for other joined channels if user manages channels -->
+        {% if my_channels %}
+            <h2 class="section-title" style="margin-top: 2rem;">Joined Channels</h2>
+        {% endif %}
+        <div class="friends-grid">
+            {% for channel in channels %}
+                <div class="friend-card">
+                    <div class="avatar-container">
+                        <div class="friend-avatar channel-avatar-placeholder">
+                            <span class="material-symbols-outlined">tag</span>
+                        </div>
+                    </div>
+                    <div class="friend-info">
+                        <h3 class="friend-name">{{ channel.name }}</h3>
+                        <!-- Updated user model reference for channel admin username -->
+                        <span class="friend-username">Created by @{{ channel.admin.user.username }}</span>
+                    </div>
+                    <a href="{% url 'channel_chat_page' channel.id %}" class="btn-chat" title="Join Channel">
+                        <span class="material-symbols-outlined">login</span>
+                        <span>Join</span>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Empty State rendered only when neither my_channels nor channels contain items -->
+    {% if not my_channels and not channels %}
+        <div class="empty-state-card">
+            <div class="empty-icon-wrapper">
+                <span class="material-symbols-outlined">forum</span>
+            </div>
+            <h2 class="empty-title">No Channels Yet</h2>
+            <p class="empty-subtitle">Be the first to create a public space for everyone to chat and hang out.</p>
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="channel" value="create">
+                <button type="submit" class="btn-action-primary">
+                    <span class="material-symbols-outlined">add_circle</span>
+                    <span>Create First Channel</span>
+                </button>
+            </form>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock content %}

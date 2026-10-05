@@ -1,0 +1,468 @@
+/* ==========================================================================
+   HLoi — Profile Page CSS (`profile_page.css`)
+   ========================================================================== */
+
+:root {
+  --bg-color: #0d1117;
+  --surface-card: #161b22;
+  --surface-variant: #21262d;
+  --border-color: #30363d;
+  
+  --accent-color: #58a6ff;
+  --accent-muted: #1f6feb;
+  --accent-text: #c9d1d9;
+  --text-primary: #f0f6fc;
+  --text-secondary: #8b949e;
+  
+  --error-color: #f85149;
+  --error-bg: rgba(248, 81, 73, 0.1);
+  --success-color: #3fb950;
+  --success-bg: rgba(63, 185, 80, 0.15);
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 9999px;
+
+  --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+}
+
+.profile-page-shell {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 32px 16px 80px 16px;
+  width: 100%;
+}
+
+.profile-form-node {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.visually-hidden {
+  display: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   Mobile App Top Bar
+   -------------------------------------------------------------------------- */
+.mobile-top-bar {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   Compact Hero Banner
+   -------------------------------------------------------------------------- */
+.profile-hero-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+}
+
+.avatar-container {
+  position: relative;
+  width: 96px;
+  height: 96px;
+}
+
+.avatar-ring {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  background-color: var(--surface-variant);
+  border: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-image.placeholder-fallback {
+  display: none;
+}
+
+.avatar-icon-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+}
+
+.avatar-icon-fallback .material-symbols-outlined {
+  font-size: 48px;
+}
+
+.avatar-edit-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-pill);
+  background-color: var(--accent-muted);
+  color: #ffffff;
+  border: 2px solid var(--surface-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.avatar-edit-badge:hover {
+  background-color: var(--accent-color);
+  transform: scale(1.05);
+}
+
+.avatar-edit-badge .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.profile-identity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.display-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.handle-tag {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+/* --------------------------------------------------------------------------
+   Segmented Tab Controller
+   -------------------------------------------------------------------------- */
+.segment-switcher {
+  display: flex;
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 4px;
+  gap: 4px;
+}
+
+.segment-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border: none;
+  border-radius: calc(var(--radius-md) - 2px);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.segment-btn .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.segment-btn.active {
+  background-color: var(--surface-variant);
+  color: var(--accent-color);
+}
+
+/* --------------------------------------------------------------------------
+   Form Fields Card
+   -------------------------------------------------------------------------- */
+.tab-viewport {
+  width: 100%;
+}
+
+.panel-content {
+  display: none;
+}
+
+.panel-content.active {
+  display: block;
+}
+
+.form-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.form-field-group:last-child {
+  border-bottom: none;
+}
+
+.field-icon {
+  margin-top: 24px;
+  color: var(--text-secondary);
+}
+
+.field-icon .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.field-control {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-control label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.field-control input[type="text"],
+.field-control textarea {
+  width: 100%;
+  background-color: var(--surface-variant);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.field-control input[type="text"]:focus,
+.field-control textarea:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 1px var(--accent-color);
+}
+
+.field-control textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.field-error {
+  font-size: 0.8rem;
+  color: var(--error-color);
+}
+
+/* Account Info Rows */
+.account-row-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.account-row-item:last-child {
+  border-bottom: none;
+}
+
+.row-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.row-value {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.mono-text {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.status-pill {
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status-pill.active {
+  background-color: var(--success-bg);
+  color: var(--success-color);
+}
+
+/* Alerts */
+.alerts-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.system-alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+}
+
+.system-alert.alert-error {
+  background-color: var(--error-bg);
+  color: var(--error-color);
+  border: 1px solid rgba(248, 81, 73, 0.2);
+}
+
+.system-alert.alert-success {
+  background-color: var(--success-bg);
+  color: var(--success-color);
+  border: 1px solid rgba(63, 185, 80, 0.2);
+}
+
+/* --------------------------------------------------------------------------
+   Desktop Action Controls
+   -------------------------------------------------------------------------- */
+.desktop-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.btn-cancel {
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: var(--transition-fast);
+}
+
+.btn-cancel:hover {
+  color: var(--text-primary);
+}
+
+.btn-save {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  background-color: var(--accent-muted);
+  color: #ffffff;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.btn-save:hover {
+  background-color: var(--accent-color);
+}
+
+/* ==========================================================================
+   Mobile Adaptive Adjustments (max-width: 600px)
+   ========================================================================== */
+@media (max-width: 600px) {
+  body {
+    padding-bottom: 72px; /* Standard spacing for bottom app bar navigation */
+  }
+
+  .profile-page-shell {
+    padding: 0 12px 24px 12px;
+  }
+
+  /* Sticky Top Header on Mobile */
+  .mobile-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 52px;
+    padding: 0 12px;
+    background-color: rgba(22, 27, 34, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    margin: 0 -12px 16px -12px;
+  }
+
+  .nav-icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .page-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .text-action-btn {
+    background: none;
+    border: none;
+    color: var(--accent-color);
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 6px 8px;
+    cursor: pointer;
+  }
+
+  .profile-hero-card {
+    padding: 20px 16px;
+  }
+
+  .desktop-actions {
+    display: none; /* Mobile save action is integrated into the sticky header */
+  }
+
+  .field-icon {
+    margin-top: 22px;
+  }
+}

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Channel Chat</title>
+{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/chat/channel_chat.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<div class="chat-container" hx-ext="ws" ws-connect="/ws/chat/channels/{{ channel_id }}/">
+    
+    <!-- Chat Header -->
+    <header class="chat-header">
+        <div class="channel-info">
+            <span class="hash-icon">#</span>
+            <h2 class="channel-title">Channel Chat</h2>
+        </div>
+        <div class="status-indicator">
+            <span class="dot"></span> Live
+        </div>
+    </header>
+
+    <!-- Chat Messages Scroll Area -->
+    <main class="chat-messages-area" id="chat-scroll">
+        <div id="messages" class="messages-list">
+            {% for message in chat_messages %}
+                <div class="message-card {% if message.sender.id == request.user.id %}own-message{% endif %}">
+                    <div class="message-header">
+                        <span class="username">@{{ message.sender.username }}</span>
+                        <span class="timestamp">{{ message.created_at|date:"h:i A" }}</span>
+                    </div>
+                    <div class="message-body" data-sender-id="{{ message.sender.id }}">
+                        {{ message.content }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <!-- Chat Input Form -->
+    <footer class="chat-input-container">
+        <form ws-send class="chat-form" id="chat-form">
+            <input 
+                type="text" 
+                name="content" 
+                placeholder="Type your message here..." 
+                autocomplete="off" 
+                required 
+                class="chat-input"
+            />
+            <button type="submit" class="send-button">
+                <span>Send</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
+        </form>
+    </footer>
+
+</div>
+
+<!-- Auto-scroll to bottom script -->
+<script>
+    document.body.addEventListener('htmx:oobAfterSwap', function(evt) {
+        const chatScroll = document.getElementById('chat-scroll');
+        if (chatScroll) {
+            chatScroll.scrollTop = chatScroll.scrollHeight;
+        }
+        // Auto-clear input after sending
+        const form = document.getElementById('chat-form');
+        if (form) form.reset();
+    });
+
+    // Initial scroll to bottom on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        const chatScroll = document.getElementById('chat-scroll');
+        if (chatScroll) {
+            chatScroll.scrollTop = chatScroll.scrollHeight;
+        }
+    });
+</script>
+{% endblock content %}

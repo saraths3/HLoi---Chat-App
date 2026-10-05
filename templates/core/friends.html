@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Connections - HLoi{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/core/friends.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="friends-workspace">
+    <!-- View Header -->
+    <header class="view-header">
+        <div class="header-titles">
+            <h1 class="view-title">Connections</h1>
+            <p class="view-subtitle">Manage your friends and start new conversations</p>
+        </div>
+        
+        <div class="header-actions">
+            <a href="{% url 'search_page' %}" class="btn-search-link" title="Find More People">
+                <span class="material-symbols-outlined">person_add</span>
+                <span>Find People</span>
+            </a>
+        </div>
+    </header>
+
+    {% if messages %}
+        <div class="messages-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem;">
+            {% for message in messages %}
+                <div class="glass-alert alert-{{ message.tags }}" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 16px; background: var(--cros-surface, #1f1f23); border: 1px solid var(--cros-border, rgba(255, 255, 255, 0.08)); color: var(--cros-label-primary, #e3e2e6); font-size: 0.85rem;">
+                    <span class="material-symbols-outlined alert-icon">
+                        {% if message.tags == 'error' %}error{% else %}info{% endif %}
+                    </span>
+                    <span class="alert-text">{{ message }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Connections Content Grid -->
+    {% if friendship %}
+        <section class="friends-grid">
+            {% for f in friendship %}
+                {% with friend=f.friend %}
+                <article class="friend-card">
+                    <div class="avatar-container">
+                        {% if friend.avatar %}
+                            <img src="{{ friend.avatar.url }}" alt="{{ friend.username }}'s avatar" class="friend-avatar">
+                        {% else %}
+                            <img src="{% static 'images/no_profile.png' %}" alt="Default avatar" class="friend-avatar">
+                        {% endif %}
+                        <span class="online-indicator"></span>
+                    </div>
+
+                    <div class="friend-info">
+                        <h3 class="friend-name">{{ friend.name|default:friend.username }}</h3>
+                        <span class="friend-username">@{{ friend.username }}</span>
+                    </div>
+
+                    <a href="#" class="btn-chat" title="Remove Friend">
+                        <span class="material-symbols-outlined">Remove</span>
+                        <span>Remove Friend</span>
+                    </a>
+                </article>
+                {% endwith %}
+            {% endfor %}
+        </section>
+    {% else %}
+        <section class="empty-state-card">
+            <div class="empty-icon-wrapper">
+                <span class="material-symbols-outlined">group_off</span>
+            </div>
+            <h2 class="empty-title">No Connections Yet</h2>
+            <p class="empty-subtitle">When you connect with friends, they will appear here ready for direct messaging.</p>
+            <a href="{% url 'search_page' %}" class="btn-action-primary">
+                <span class="material-symbols-outlined">search</span>
+                <span>Discover People</span>
+            </a>
+        </section>
+    {% endif %}
+</main>
+{% endblock content %}

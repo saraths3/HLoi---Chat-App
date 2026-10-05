@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Chat — {{ other_profile.username }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+<link rel="stylesheet" href="{% static 'css/chat/direct_chat.css' %}">
+{% endblock %}
+
+{% block content %}
+<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+<script src="https://unpkg.com/htmx-ext-ws@2.0.2"></script>
+
+<div class="chat-workspace" hx-ext="ws" ws-connect="/ws/chat/direct/{{ other_profile.id }}/">
+
+    <header class="chat-header">
+        <a href="{% url 'home_page' %}" class="btn-back-link" title="Back"><span class="material-symbols-outlined">arrow_back</span></a>
+        <div class="chat-header-user">
+            <div class="avatar-container">
+                {% if other_profile.avatar %}
+                    <img src="{{ other_profile.avatar.url }}" alt="Avatar" class="friend-avatar">
+                {% else %}
+                    <img src="{% static 'images/no_profile.png' %}" alt="Avatar" class="friend-avatar">
+                {% endif %}
+                <span class="online-indicator"></span>
+            </div>
+            <div class="friend-info">
+                <h2 class="friend-name">{{ other_profile.name|default:other_profile.username }}</h2>
+                <span class="friend-username">@{{ other_profile.username }}</span>
+            </div>
+        </div>
+    </header>
+
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="glass-alert alert-{{ message.tags }}"><span class="material-symbols-outlined alert-icon">info</span><span>{{ message }}</span></div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <section id="messages" class="messages-stream">
+        {% if chat_messages %}
+            {% for msg in chat_messages %}
+                <div class="message-bubble {% if msg.sender == request.user.profile %}outgoing{% else %}incoming{% endif %}">
+                    <div class="bubble-content">
+                        <p class="message-text">{{ msg.content }}</p>
+                        <span class="message-timestamp">{{ msg.updated_at|date:"h:i A" }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state-card" id="empty-chat-placeholder">
+                <div class="empty-icon-wrapper"><span class="material-symbols-outlined">chat</span></div>
+                <p class="empty-title">No messages yet</p>
+                <p class="empty-subtitle">Start the conversation!</p>
+            </div>
+        {% endif %}
+    </section>
+
+    <footer class="chat-input-bar">
+        <form class="chat-form" ws-send hx-on::ws-after-send="this.reset()">
+            {% csrf_token %}
+            <div class="input-container">
+                <input type="text" name="content" placeholder="Type a message..." autocomplete="off" required autofocus>
+            </div>
+            <button type="submit" class="btn-send-message" title="Send Message"><span class="material-symbols-outlined">send</span><span class="btn-text">Send</span></button>
+        </form>
+    </footer>
+
+</div>
+
+<script>
+    function scrollToBottom() {
+        const stream = document.getElementById('messages');
+        if (stream) stream.scrollTop = stream.scrollHeight;
+    }
+    window.addEventListener('load', scrollToBottom);
+    document.body.addEventListener('htmx:wsAfterMessage', function() {
+        const placeholder = document.getElementById('empty-chat-placeholder');
+        if (placeholder) placeholder.remove();
+        scrollToBottom();
+    });
+</script>
+{% endblock %}

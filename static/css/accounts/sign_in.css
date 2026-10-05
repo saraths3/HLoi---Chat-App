@@ -1,0 +1,278 @@
+/* ==========================================================================
+   MATERIAL 3 EXPRESSIVE UI — SIGN-IN DESIGN SYSTEM
+   ========================================================================== */
+
+:root {
+  /* Material 3 Expressive Color Palette (Dark Mode Tonal Tokens) */
+  --md-sys-color-background: #0f1318;
+  --md-sys-color-surface: #171c22;
+  --md-sys-color-surface-container-lowest: #0a0e12;
+  --md-sys-color-surface-container-low: #13171d;
+  --md-sys-color-surface-container: #1d242c;
+  --md-sys-color-surface-container-high: #27303a;
+  --md-sys-color-surface-container-highest: #323b46;
+
+  /* Expressive Accent Tokens */
+  --md-sys-color-primary: #a8c7ff;
+  --md-sys-color-on-primary: #003062;
+  --md-sys-color-primary-container: #004789;
+  --md-sys-color-on-primary-container: #d6e3ff;
+  
+  --md-sys-color-secondary: #bec6dc;
+  --md-sys-color-secondary-container: #3b4758;
+  --md-sys-color-on-secondary-container: #dbe2f9;
+
+  /* Typography & Details */
+  --md-sys-color-on-surface: #e1e2e8;
+  --md-sys-color-on-surface-variant: #c2c7cf;
+  --md-sys-color-outline: #8c9199;
+  --md-sys-color-outline-variant: rgba(255, 255, 255, 0.08);
+
+  /* Material 3 Expressive Shape Tokens */
+  --md-shape-corner-extra-small: 4px;
+  --md-shape-corner-small: 8px;
+  --md-shape-corner-medium: 16px;
+  --md-shape-corner-large: 28px;
+  --md-shape-corner-extra-large: 36px;
+  --md-shape-corner-full: 9999px;
+
+  /* M3 Motion Easing */
+  --md-motion-easing-standard: cubic-bezier(0.2, 0.0, 0.0, 1.0);
+  --md-motion-easing-emphasized: cubic-bezier(0.05, 0.7, 0.1, 1.0);
+  --md-motion-easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ==========================================================================
+   PAGE CANVAS & SPATIAL CENTERING
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  background-color: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-surface);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 24px 16px;
+}
+
+/* Material Symbols Optical Defaults */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  user-select: none;
+}
+
+/* ==========================================================================
+   EXPRESSIVE AUTH CONTAINER / CARD
+   ========================================================================== */
+
+.auth-surface {
+  width: 100%;
+  max-width: 440px;
+  background-color: var(--md-sys-color-surface-container);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-shape-corner-extra-large);
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  animation: surface-appear 0.4s var(--md-motion-easing-emphasized) forwards;
+}
+
+@keyframes surface-appear {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ==========================================================================
+   HEADER SECTION
+   ========================================================================== */
+
+.auth-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Expressive Badge Icon Container */
+.app-icon-container {
+  width: 64px;
+  height: 64px;
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  border-radius: var(--md-shape-corner-large);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s var(--md-motion-easing-spring);
+}
+
+.app-icon-container:hover {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+.app-icon-container .material-symbols-outlined {
+  font-size: 32px;
+  font-variation-settings: 'FILL' 1;
+}
+
+.md-title {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--md-sys-color-on-surface);
+  line-height: 1.2;
+}
+
+.md-body {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--md-sys-color-on-surface-variant);
+  max-width: 320px;
+}
+
+/* ==========================================================================
+   PROVIDER ACTIONS GRID
+   ========================================================================== */
+
+.auth-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--md-sys-color-primary);
+  margin-bottom: 4px;
+  display: block;
+}
+
+/* M3 Expressive Buttons */
+.md-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  height: 56px;
+  padding: 0 20px;
+  background-color: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-shape-corner-medium);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.2s var(--md-motion-easing-standard),
+              border-color 0.2s var(--md-motion-easing-standard),
+              transform 0.2s var(--md-motion-easing-spring);
+}
+
+.md-btn .btn-icon {
+  font-size: 22px;
+  color: var(--md-sys-color-primary);
+  transition: transform 0.2s var(--md-motion-easing-spring);
+}
+
+.md-btn .btn-text {
+  flex: 1;
+}
+
+/* Hover & Active States */
+.md-btn:hover {
+  background-color: var(--md-sys-color-surface-container-highest);
+  border-color: rgba(168, 199, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.md-btn:hover .btn-icon {
+  transform: scale(1.15);
+}
+
+.md-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Specific Provider Accent Touches */
+.md-btn.provider-google:hover .btn-icon { color: #ea4335; }
+.md-btn.provider-discord:hover .btn-icon { color: #5865f2; }
+.md-btn.provider-github:hover .btn-icon { color: #ffffff; }
+.md-btn.provider-facebook:hover .btn-icon { color: #1877f2; }
+
+/* ==========================================================================
+   FOOTER SECTION
+   ========================================================================== */
+
+.auth-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.footer-icon {
+  font-size: 16px;
+  color: var(--md-sys-color-outline);
+}
+
+.footer-text {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--md-sys-color-outline);
+}
+
+/* ==========================================================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================================================== */
+
+@media (max-width: 480px) {
+  .auth-surface {
+    padding: 28px 20px;
+    border-radius: var(--md-shape-corner-large);
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  .md-btn {
+    height: 52px;
+  }
+}

@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}HLoi — Home{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/core/home_page.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="home-workspace">
+    <!-- Header Section -->
+    
+
+    <!-- Search Form Input Group -->
+    <section class="search-bar-section">
+        <form action="{% url 'home_page' %}" method="get" class="search-glass-form">
+            <div class="input-wrapper">
+                <span class="material-symbols-outlined search-icon">search</span>
+                <input 
+                    type="search" 
+                    name="q" 
+                    placeholder="Search by name or @username..." 
+                    value="{{ query }}"
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+            </div>
+            <button type="submit" class="btn-search-submit">
+                <span>Search</span>
+            </button>
+        </form>
+    </section>
+
+    <!-- Friends List Section -->
+    <section class="friends-section">
+        {% if friends %}
+            <div class="friends-grid">
+                {% for friend in friends %}
+                    {% if friend.sender_profile == user.profile %}
+                        <article class="friend-card">
+                            <div class="avatar-container">
+                                {% if friend.reciever_profile.avatar %}
+                                    <img src="{{ friend.reciever_profile.avatar.url }}" alt="{{ friend.reciever_profile.username }}'s avatar" class="friend-avatar">
+                                {% else %}
+                                    <img src="{% static 'images/no_profile.png' %}" alt="Default avatar" class="friend-avatar">
+                                {% endif %}
+                            </div>
+
+                            <div class="friend-meta">
+                                <h3 class="friend-name">{{ friend.reciever_profile.name }}</h3>
+                                <span class="friend-username">@{{ friend.reciever_profile.username }}</span>
+                            </div>
+
+                            <div class="friend-action">
+                                <a href="{% url 'direct_chat_page' friend.reciever_profile.id %}" class="btn btn-primary btn-chat">
+                                    <span class="material-symbols-outlined">chat_bubble</span>
+                                    <span>Chat</span>
+                                </a>
+                            </div>
+                        </article>
+                    {% elif friend.reciever_profile == user.profile %}
+                        <article class="friend-card">
+                            <div class="avatar-container">
+                                {% if friend.sender_profile.avatar %}
+                                    <img src="{{ friend.sender_profile.avatar.url }}" alt="{{ friend.sender_profile.username }}'s avatar" class="friend-avatar">
+                                {% else %}
+                                    <img src="{% static 'images/no_profile.png' %}" alt="Default avatar" class="friend-avatar">
+                                {% endif %}
+                            </div>
+
+                            <div class="friend-meta">
+                                <h3 class="friend-name">{{ friend.sender_profile.name }}</h3>
+                                <span class="friend-username">@{{ friend.sender_profile.username }}</span>
+                            </div>
+
+                            <div class="friend-action">
+                                <a href="{% url 'direct_chat_page' friend.sender_profile.id %}" class="btn btn-primary btn-chat">
+                                    <span class="material-symbols-outlined">chat_bubble</span>
+                                    <span>Chat</span>
+                                </a>
+                            </div>
+                        </article>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </section>
+</main>
+{% endblock content %}

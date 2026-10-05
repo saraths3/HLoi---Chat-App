@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}HLoi — Friend Requests{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/core/alerts.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="alerts-container">
+    <header class="page-header">
+        <h1 class="page-title">Friend Requests</h1>
+        <p class="page-subtitle">Manage incoming connection requests</p>
+    </header>
+
+    {% if messages %}
+        <div class="messages-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.5rem;">
+            {% for message in messages %}
+                <div class="glass-alert alert-{{ message.tags }}" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 16px; background: var(--surface-low, #32302f); border: 1px solid var(--surface-high, #504945); color: var(--fg-main, #ebdbb2); font-size: 0.85rem;">
+                    <span class="material-symbols-outlined alert-icon">
+                        {% if message.tags == 'error' %}error{% else %}info{% endif %}
+                    </span>
+                    <span class="alert-text">{{ message }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if friend_requests %}
+        <div class="requests-list">
+            {% for fr in friend_requests %}
+                <div class="request-card">
+                    <!-- Sender Profile Avatar -->
+                    <div class="request-avatar">
+                        {% if fr.sender_profile.avatar %}
+                            <img src="{{ fr.sender_profile.avatar.url }}" alt="{{ fr.sender_profile.name|default:fr.sender_profile.username }}">
+                        {% else %}
+                            <img src="{% static 'images/no_profile.png' %}" alt="Default avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% endif %}
+                    </div>
+
+                    <!-- Sender Info -->
+                    <div class="request-info">
+                        <span class="request-name">{{ fr.sender_profile.name|default:fr.sender_profile.username }}</span>
+                        <span class="request-username">@{{ fr.sender_profile.username }}</span>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="request-actions">
+                        <form action="{% url 'accept_fr' fr.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                            <button type="submit" class="btn-primary">
+                                <span class="material-symbols-outlined">check</span>
+                                <span>Accept</span>
+                            </button>
+                        </form>
+                        
+                        <form action="{% url 'reject_fr' fr.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                            <button type="submit" class="btn-secondary">
+                                <span class="material-symbols-outlined">close</span>
+                                <span>Decline</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <span class="material-symbols-outlined">notifications_off</span>
+            <p>No pending friend requests</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock content %}

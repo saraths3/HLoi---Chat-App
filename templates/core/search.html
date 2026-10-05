@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Discover - HLoi{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/core/search.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="search-workspace">
+    <!-- Header Section -->
+    <header class="view-header">
+        <div class="header-titles">
+            <h1 class="view-title">Discover</h1>
+            <p class="view-subtitle">Search for people across HLoi to connect and start chatting</p>
+        </div>
+    </header>
+
+    <!-- Search Form Input Group -->
+    <section class="search-bar-section">
+        <form action="{% url 'search_page' %}" method="get" class="search-glass-form">
+            <div class="input-wrapper">
+                <span class="material-symbols-outlined search-icon">search</span>
+                <input 
+                    type="search" 
+                    name="q" 
+                    placeholder="Search by name or @username..." 
+                    value="{{ query }}"
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+            </div>
+            <button type="submit" class="btn-search-submit">
+                <span>Search</span>
+            </button>
+        </form>
+    </section>
+
+    <!-- System Alert Messages -->
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="glass-alert alert-{{ message.tags }}">
+                    <span class="material-symbols-outlined alert-icon">
+                        {% if message.tags == 'error' %}error{% else %}info{% endif %}
+                    </span>
+                    <span class="alert-text">{{ message }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Profiles Content Grid -->
+    <section class="profiles-section">
+        {% if profiles %}
+            <div class="profiles-grid">
+                {% for profile in profiles %}
+                    <article class="profile-card">
+                        <div class="avatar-container">
+                            {% if profile.avatar %}
+                                <img src="{{ profile.avatar.url }}" alt="{{ profile.username }}'s avatar" class="profile-avatar">
+                            {% else %}
+                                <img src="{% static 'images/no_profile.png' %}" alt="Default avatar" class="profile-avatar">
+                            {% endif %}
+                        </div>
+
+                        <div class="profile-meta">
+                            <h3 class="profile-name">{{ profile.name|default:profile.username }}</h3>
+                            <span class="profile-username">@{{ profile.username }}</span>
+                        </div>
+
+                        <!-- Dynamic Friendship Status Action -->
+                        <div class="profile-action">
+                            {% if profile.friendship_status == 'accepted' %}
+                                <button class="btn btn-status btn-friends" disabled>
+                                    <span class="material-symbols-outlined">check_circle</span>
+                                    <span>Friends</span>
+                                </button>
+
+                            {% elif profile.friendship_status == 'pending' %}
+                                {% if profile.is_sender %}
+                                    <button class="btn btn-status btn-pending" disabled>
+                                        <span class="material-symbols-outlined">pending</span>
+                                        <span>Sent</span>
+                                    </button>
+                                {% else %}
+                                    <form action="{% url 'accept_fr' profile.friendship_id %}" method="post" class="action-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                        <button type="submit" class="btn btn-primary btn-accept">
+                                            <span class="material-symbols-outlined">person_add</span>
+                                            <span>Accept</span>
+                                        </button>
+                                    </form>
+                                {% endif %}
+
+                            {% else %}
+                                <form action="{% url 'send_fr' profile.id %}" method="post" class="action-form">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                    <button type="submit" class="btn btn-primary btn-add">
+                                        <span class="material-symbols-outlined">person_add</span>
+                                        <span>Connect</span>
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-search-state">
+                <div class="empty-icon-wrapper">
+                    <span class="material-symbols-outlined">person_search</span>
+                </div>
+                {% if query %}
+                    <h2 class="empty-title">No Profiles Found</h2>
+                    <p class="empty-subtitle">We couldn't find anyone matching "<strong>{{ query }}</strong>". Try checking for typos or searching by exact username.</p>
+                {% else %}
+                    <h2 class="empty-title">Find Someone New</h2>
+                    <p class="empty-subtitle">Type a name or handle in the search bar above to discover users on HLoi.</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </section>
+</main>
+{% endblock content %}

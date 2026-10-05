@@ -1,0 +1,134 @@
+@import url('channels.css');
+
+/* ==========================================================================
+   CHANNEL CREATION FORM STYLES
+   ========================================================================== */
+
+.channel-create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  width: 100%;
+}
+
+/* Section Labels & Headings */
+.form-label, 
+.section-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+  margin-bottom: 8px;
+  display: block;
+  letter-spacing: 0.01em;
+}
+
+/* Input Fields */
+.input-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: var(--md-sys-color-surface-container);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-shape-corner-md);
+  padding: 0 16px;
+  height: 52px;
+  transition: border-color 0.2s var(--md-motion-easing-standard),
+              box-shadow 0.2s var(--md-motion-easing-standard);
+}
+
+.input-container:focus-within {
+  border-color: var(--md-sys-color-primary);
+  box-shadow: 0 0 0 2px rgba(168, 199, 255, 0.2);
+}
+
+.input-container .input-icon {
+  color: var(--md-sys-color-primary);
+  font-size: 22px;
+}
+
+.input-container input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--md-sys-color-on-surface);
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.input-container input::placeholder {
+  color: var(--md-sys-color-on-surface-variant);
+  opacity: 0.7;
+}
+
+/* ==========================================================================
+   SELECTABLE FRIEND CARDS
+   ========================================================================== */
+
+.friends-selection-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.selectable-card {
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  transition: transform 0.2s var(--md-motion-easing-spring),
+              border-color 0.2s var(--md-motion-easing-standard),
+              background-color 0.2s var(--md-motion-easing-standard);
+}
+
+.member-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.checkmark-icon {
+  font-size: 22px;
+  color: var(--md-sys-color-surface-container-highest);
+  transition: color 0.2s var(--md-motion-easing-standard),
+              transform 0.2s var(--md-motion-easing-spring);
+  margin-left: auto;
+}
+
+/* Checked Card State */
+.selectable-card:has(.member-checkbox:checked) {
+  border-color: var(--md-sys-color-primary);
+  background-color: var(--md-sys-color-surface-container-high);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.selectable-card:has(.member-checkbox:checked) .checkmark-icon {
+  color: var(--md-sys-color-primary);
+  transform: scale(1.1);
+}
+
+/* Form Action Buttons */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 12px;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 600px) {
+  .form-actions {
+    justify-content: stretch;
+  }
+
+  .form-actions .btn-action-primary {
+    width: 100%;
+    justify-content: center;
+  }
+}

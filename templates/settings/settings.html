@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    <title>HLoi - Settings</title>
+{% endblock title %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/settings/settings.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="settings-page">
+
+        <!-- Top App Bar / Header -->
+        <header class="settings-header">
+            <div class="settings-header-icon" aria-hidden="true">
+                <span class="material-symbols-outlined">settings</span>
+            </div>
+            <div class="settings-header-text">
+                <h1>Settings</h1>
+                <p>Manage your HLoi application preferences</p>
+            </div>
+        </header>
+
+        <!-- Section: Appearance -->
+        <section class="settings-section">
+            <h2 class="section-title">Appearance</h2>
+            <div class="settings-group">
+
+                <div class="settings-card">
+                    <div class="setting-icon">
+                        <span class="material-symbols-outlined">dark_mode</span>
+                    </div>
+                    <div class="setting-info">
+                        <h3>Dark mode</h3>
+                        <p>Use dark appearance across HLoi interface</p>
+                    </div>
+                    <label class="m3-switch" aria-label="Toggle dark mode">
+                        <input type="checkbox" checked>
+                        <span class="m3-switch-track">
+                            <span class="m3-switch-thumb"></span>
+                        </span>
+                    </label>
+                </div>
+
+                <div class="settings-card">
+                    <div class="setting-icon">
+                        <span class="material-symbols-outlined">palette</span>
+                    </div>
+                    <div class="setting-info">
+                        <h3>Theme</h3>
+                        <p>Choose theme behavior preference</p>
+                    </div>
+                    <div class="select-wrapper">
+                        <select class="settings-select" aria-label="Select theme mode">
+                            <option value="system">System default</option>
+                            <option value="light">Light</option>
+                            <option value="dark" selected>Dark</option>
+                        </select>
+                        <span class="material-symbols-outlined select-arrow">arrow_drop_down</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section: Notifications -->
+        <section class="settings-section">
+            <h2 class="section-title">Notifications</h2>
+            <div class="settings-group">
+
+                <div class="settings-card">
+                    <div class="setting-icon">
+                        <span class="material-symbols-outlined">notifications</span>
+                    </div>
+                    <div class="setting-info">
+                        <h3>Message notifications</h3>
+                        <p>Receive alert popups when new messages arrive</p>
+                    </div>
+                    <label class="m3-switch" aria-label="Toggle message notifications">
+                        <input type="checkbox" checked>
+                        <span class="m3-switch-track">
+                            <span class="m3-switch-thumb"></span>
+                        </span>
+                    </label>
+                </div>
+
+                <div class="settings-card">
+                    <div class="setting-icon">
+                        <span class="material-symbols-outlined">volume_up</span>
+                    </div>
+                    <div class="setting-info">
+                        <h3>Message sounds</h3>
+                        <p>Play audio alert for incoming messages</p>
+                    </div>
+                    <label class="m3-switch" aria-label="Toggle message sounds">
+                        <input type="checkbox" checked>
+                        <span class="m3-switch-track">
+                            <span class="m3-switch-thumb"></span>
+                        </span>
+                    </label>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section: Chat -->
+        <section class="settings-section">
+            <h2 class="section-title">Chat & Messaging</h2>
+            <div class="settings-group">
+
+                <div class="settings-card">
+                    <div class="setting-icon">
+                        <span class="material-symbols-outlined">keyboard_return</span>
+                    </div>
+                    <div class="setting-info">
+                        <h3>Enter to send</h3>
+                        <p>Press Enter key on keyboard to send message</p>
+                    </div>
+                    <label class="m3-switch" aria-label="Toggle Enter key to send">
+                        <input type="checkbox" checked>
+                        <span class="m3-switch-track">
+                            <span class="m3-switch-thumb"></span>
+                        </span>
+                    </label>
+                </div>
+
+                <div class="settings-card">
+                    <div class="setting-icon">
+                        <span class="material-symbols-outlined">visibility</span>
+                    </div>
+                    <div class="setting-info">
+                        <h3>Message previews</h3>
+                        <p>Show message preview snippet in desktop banners</p>
+                    </div>
+                    <label class="m3-switch" aria-label="Toggle message previews">
+                        <input type="checkbox" checked>
+                        <span class="m3-switch-track">
+                            <span class="m3-switch-thumb"></span>
+                        </span>
+                    </label>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section: Privacy -->
+        <section class="settings-section">
+            <h2 class="section-title">Privacy & Presence</h2>
+            <div class="settings-group">
+
+                <div class="settings-card">
+                    <div class="setting-icon">
+                        <span class="material-symbols-outlined">person</span>
+                    </div>
+                    <div class="setting-info">
+                        <h3>Online status</h3>
+                        <p>Allow contacts to see when you are active</p>
+                    </div>
+                    <label class="m3-switch" aria-label="Toggle online status">
+                        <input type="checkbox" checked>
+                        <span class="m3-switch-track">
+                            <span class="m3-switch-thumb"></span>
+                        </span>
+                    </label>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+{% endblock content %}

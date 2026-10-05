@@ -1,0 +1,199 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>{% block title %}HLoi{% endblock %}</title>
+
+    <!-- Typography & Material Symbols -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <script src="https://unpkg.com/htmx-ext-ws@2.0.2"></script>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="app-layout">
+
+        <!-- Main Workspace Shell -->
+        <main class="app-workspace">
+            {% block content %}{% endblock content %}
+        </main>
+
+        {% block navbar %}
+        <!-- Desktop Floating Bottom Dock & Mobile Bottom Navigation Bar -->
+        <nav class="navigation-dock" aria-label="Main Navigation">
+            <div class="dock-container">
+                <!-- 1. Brand Badge (Leftmost Side) -->
+                <a href="{% url 'home_page' %}" class="brand-badge desktop-only" title="HLoi Home">
+                    <span class="material-symbols-outlined">forum</span>
+                </a>
+
+                <!-- 2. Centered Navigation Items Wrapper -->
+                <div class="dock-center-items">
+                    <a href="{% url 'home_page' %}" class="dock-item {% if request.resolver_match.url_name == 'home_page' %}active{% endif %}" title="Chats">
+                        <div class="icon-wrapper">
+                            <span class="material-symbols-outlined">chat_bubble</span>
+                        </div>
+                        <span class="dock-label">Chats</span>
+                    </a>
+
+                    <a href="{% url 'channels_page' %}" class="dock-item {% if request.resolver_match.url_name == 'channels_page' %}active{% endif %}" title="Channels">
+                        <div class="icon-wrapper">
+                            <span class="material-symbols-outlined">tag</span>
+                        </div>
+                        <span class="dock-label">Channels</span>
+                    </a>
+
+                    <a href="{% url 'search_page' %}" class="dock-item {% if request.resolver_match.url_name == 'search_page' %}active{% endif %}" title="Search">
+                        <div class="icon-wrapper">
+                            <span class="material-symbols-outlined">search</span>
+                        </div>
+                        <span class="dock-label">Search</span>
+                    </a>
+
+                    <a href="{% url 'friends_page' %}" class="dock-item {% if request.resolver_match.url_name == 'friends_page' %}active{% endif %}" title="Friends">
+                        <div class="icon-wrapper">
+                            <span class="material-symbols-outlined">group</span>
+                        </div>
+                        <span class="dock-label">Friends</span>
+                    </a>
+
+                    <a href="{% url 'alerts_page' %}" class="dock-item desktop-only {% if request.resolver_match.url_name == 'alerts_page' %}active{% endif %}" title="Alerts">
+                        <div class="icon-wrapper">
+                            <span class="material-symbols-outlined">notifications</span>
+                        </div>
+                        <span class="dock-label">Alerts</span>
+                    </a>
+
+                    <a href="{% url 'profile_page' %}" class="dock-item desktop-only {% if request.resolver_match.url_name == 'profile_page' %}active{% endif %}" title="Profile">
+                        <div class="icon-wrapper avatar-wrapper">
+                            {% if user.is_authenticated and user.profile.avatar %}
+                                <img src="{{ user.profile.avatar.url }}" alt="{{ user.profile.name|default:user.profile.username }}'s Avatar" class="profile-avatar">
+                            {% else %}
+                                <span class="material-symbols-outlined">account_circle</span>
+                            {% endif %}
+                        </div>
+                        <span class="dock-label">Profile</span>
+                    </a>
+
+                </div>
+
+                <!-- 3. Logout / Login Button (Rightmost Side) -->
+                {% if user.is_authenticated %}
+                <a href="{% url 'logout_page' %}" class="dock-item logout-item desktop-only" title="Logout">
+                    <div class="icon-wrapper">
+                        <span class="material-symbols-outlined">logout</span>
+                    </div>
+                    <span class="dock-label">Logout</span>
+                </a>
+                {% else %}
+                <a href="{% url 'sign_in_page' %}" class="dock-item logout-item desktop-only {% if request.resolver_match.url_name == 'sign_in_page' %}active{% endif %}" title="Sign In">
+                    <div class="icon-wrapper">
+                        <span class="material-symbols-outlined">login</span>
+                    </div>
+                    <span class="dock-label">Login</span>
+                </a>
+                {% endif %}
+
+                <!-- Mobile Three-Dot "More" Button -->
+                <button type="button" class="dock-item mobile-only" id="open-more-btn" aria-label="Open More Options" aria-controls="mobile-drawer">
+                    <div class="icon-wrapper">
+                        <span class="material-symbols-outlined">more_horiz</span>
+                    </div>
+                    <span class="dock-label">More</span>
+                </button>
+            </div>
+        </nav>
+        {% endblock navbar %}
+
+        <!-- Mobile Drawer Pop-Up Sheet -->
+        <div class="mobile-drawer-overlay" id="mobile-drawer" aria-hidden="true">
+            <div class="mobile-drawer-content" role="dialog" aria-modal="true" aria-label="More Navigation Options">
+                <div class="drawer-header">
+                    <div class="drawer-brand">
+                        <span class="material-symbols-outlined">forum</span>
+                        <span>HLoi Options</span>
+                    </div>
+                    <button type="button" class="drawer-close-btn" id="close-more-btn" aria-label="Close Navigation">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <div class="drawer-grid">
+                    <a href="{% url 'alerts_page' %}" class="drawer-item {% if request.resolver_match.url_name == 'alerts_page' %}active{% endif %}">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span>Alerts</span>
+                    </a>
+                    <a href="{% url 'profile_page' %}" class="drawer-item {% if request.resolver_match.url_name == 'profile_page' %}active{% endif %}">
+                        <span class="material-symbols-outlined">account_circle</span>
+                        <span>Profile</span>
+                    </a>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'logout_page' %}" class="drawer-item text-danger">
+                        <span class="material-symbols-outlined">logout</span>
+                        <span>Logout</span>
+                    </a>
+                    {% else %}
+                    <a href="{% url 'sign_in_page' %}" class="drawer-item">
+                        <span class="material-symbols-outlined">login</span>
+                        <span>Login</span>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Drawer JS Controller -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const openBtn = document.getElementById('open-more-btn');
+            const closeBtn = document.getElementById('close-more-btn');
+            const drawer = document.getElementById('mobile-drawer');
+
+            const toggleDrawer = (open) => {
+                if (!drawer) return;
+                if (open) {
+                    drawer.classList.add('active');
+                    drawer.setAttribute('aria-hidden', 'false');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    drawer.classList.remove('active');
+                    drawer.setAttribute('aria-hidden', 'true');
+                    document.body.style.overflow = '';
+                }
+            };
+
+            if (openBtn && drawer) {
+                openBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    toggleDrawer(true);
+                });
+
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', () => toggleDrawer(false));
+                }
+
+                drawer.addEventListener('click', (e) => {
+                    if (e.target === drawer) {
+                        toggleDrawer(false);
+                    }
+                });
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && drawer.classList.contains('active')) {
+                        toggleDrawer(false);
+                    }
+                });
+            }
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

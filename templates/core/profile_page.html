@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}HLoi — Edit Profile{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/core/profile_page.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="profile-page-shell">
+    <form action="" enctype="multipart/form-data" method="post" id="profile-form" class="profile-form-node">
+        {% csrf_token %}
+
+        <!-- Mobile Top App Bar with Embedded Action -->
+        <header class="mobile-top-bar">
+            <a href="{% url 'home_page' %}" class="nav-icon-btn" aria-label="Go back">
+                <span class="material-symbols-outlined">arrow_back</span>
+            </a>
+            <span class="page-title">Edit Profile</span>
+            <button type="submit" class="text-action-btn">Save</button>
+        </header>
+
+        <!-- Compact Hero Banner -->
+        <section class="profile-hero-card">
+            <div class="avatar-container">
+                <div class="avatar-ring">
+                    <img 
+                        id="avatar-preview" 
+                        src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static 'images/no_profile.png' %}{% endif %}" 
+                        alt="{{ user.profile.username }}'s avatar"
+                        class="avatar-image {% if not user.profile.avatar %}placeholder-fallback{% endif %}"
+                        onerror="this.onerror=null; this.classList.add('placeholder-fallback');">
+                    <div class="avatar-icon-fallback" id="avatar-fallback-icon" style="{% if user.profile.avatar %}display: none;{% endif %}">
+                        <span class="material-symbols-outlined">person</span>
+                    </div>
+                </div>
+                <label for="{{ form.avatar.id_for_label }}" class="avatar-edit-badge" title="Change Profile Picture">
+                    <span class="material-symbols-outlined">photo_camera</span>
+                </label>
+                <div class="visually-hidden">{{ form.avatar }}</div>
+            </div>
+
+            <div class="profile-identity">
+                <h1 class="display-name">{{ user.profile.name|default:user.profile.username }}</h1>
+                <span class="handle-tag">@{{ user.profile.username }}</span>
+            </div>
+        </section>
+
+        <!-- Segmented Tab Navigation -->
+        <nav class="segment-switcher" role="tablist" aria-label="Profile Sections">
+            <button type="button" class="segment-btn active" role="tab" id="tab-general" aria-selected="true" aria-controls="panel-general" data-tab="general">
+                <span class="material-symbols-outlined">person</span>
+                <span>Personal</span>
+            </button>
+            <button type="button" class="segment-btn" role="tab" id="tab-account" aria-selected="false" aria-controls="panel-account" data-tab="account">
+                <span class="material-symbols-outlined">shield</span>
+                <span>Account</span>
+            </button>
+        </nav>
+
+        <!-- System Alerts -->
+        {% if messages %}
+        <div class="alerts-wrapper">
+            {% for message in messages %}
+                <div class="system-alert alert-{{ message.tags }}">
+                    <span class="material-symbols-outlined">
+                        {% if message.tags == 'error' %}error{% else %}check_circle{% endif %}
+                    </span>
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if form.non_field_errors %}
+        <div class="alerts-wrapper">
+            {% for error in form.non_field_errors %}
+                <div class="system-alert alert-error">
+                    <span class="material-symbols-outlined">error</span>
+                    <span>{{ error }}</span>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Tab Content Viewport -->
+        <div class="tab-viewport">
+            <!-- Panel 1: Personal Details -->
+            <div class="panel-content active" id="panel-general" role="tabpanel" aria-labelledby="tab-general">
+                <div class="form-card">
+                    <div class="form-field-group">
+                        <div class="field-icon">
+                            <span class="material-symbols-outlined">badge</span>
+                        </div>
+                        <div class="field-control">
+                            <label for="{{ form.name.id_for_label }}">Full Name</label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                                <span class="field-error">{{ form.name.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-field-group">
+                        <div class="field-icon">
+                            <span class="material-symbols-outlined">alternate_email</span>
+                        </div>
+                        <div class="field-control">
+                            <label for="{{ form.username.id_for_label }}">Username</label>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                                <span class="field-error">{{ form.username.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-field-group multiline-group">
+                        <div class="field-icon">
+                            <span class="material-symbols-outlined">notes</span>
+                        </div>
+                        <div class="field-control">
+                            <label for="{{ form.bio.id_for_label }}">Bio</label>
+                            {{ form.bio }}
+                            {% if form.bio.errors %}
+                                <span class="field-error">{{ form.bio.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel 2: Account Overview -->
+            <div class="panel-content" id="panel-account" role="tabpanel" aria-labelledby="tab-account">
+                <div class="form-card">
+                    <div class="account-row-item">
+                        <span class="row-label">User ID</span>
+                        <span class="row-value mono-text">{{ user.profile.id }}</span>
+                    </div>
+                    {% if user.email %}
+                    <div class="account-row-item">
+                        <span class="row-label">Registered Email</span>
+                        <span class="row-value">{{ user.email }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="account-row-item">
+                        <span class="row-label">Account Status</span>
+                        <span class="status-pill active">Active</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Desktop Form Actions Bar -->
+        <footer class="desktop-actions">
+            <a href="{% url 'home_page' %}" class="btn-cancel">Cancel</a>
+            <button type="submit" class="btn-save">
+                <span class="material-symbols-outlined">check</span>
+                <span>Save Changes</span>
+            </button>
+        </footer>
+    </form>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const segments = document.querySelectorAll('.segment-btn');
+        const panels = document.querySelectorAll('.panel-content');
+
+        segments.forEach(segment => {
+            segment.addEventListener('click', () => {
+                const targetTab = segment.dataset.tab;
+
+                segments.forEach(s => {
+                    s.classList.remove('active');
+                    s.setAttribute('aria-selected', 'false');
+                });
+
+                panels.forEach(p => p.classList.remove('active'));
+
+                segment.classList.add('active');
+                segment.setAttribute('aria-selected', 'true');
+                
+                const activePanel = document.getElementById(`panel-${targetTab}`);
+                if (activePanel) {
+                    activePanel.classList.add('active');
+                }
+            });
+        });
+
+        const avatarInput = document.getElementById('{{ form.avatar.id_for_label }}');
+        const avatarPreview = document.getElementById('avatar-preview');
+        const avatarFallback = document.getElementById('avatar-fallback-icon');
+
+        if (avatarInput) {
+            avatarInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (evt) => {
+                        if (avatarPreview) {
+                            avatarPreview.src = evt.target.result;
+                            avatarPreview.classList.remove('placeholder-fallback');
+                        }
+                        if (avatarFallback) {
+                            avatarFallback.style.display = 'none';
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    });
+</script>
+{% endblock content %}

@@ -1,0 +1,6 @@
+.venv/
+venv/
+db_*
+media/
+.env
+
