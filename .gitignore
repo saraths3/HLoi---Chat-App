@@ -6,6 +6,7 @@ media/
 
 .env
 
+__py*
 __pycache__/
 *.pyc
 
