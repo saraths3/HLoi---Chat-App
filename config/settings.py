@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 
 from pathlib import Path
 from decouple import config
+from urllib.parse import urlparse, parse_qsl
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -151,17 +153,19 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
+tmp_postgres = urlparse(config('DATABASE_URL'))
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'hloi_db',
-        'USER': 'hloi_user',
-        'PASSWORD': 'hloi_db_password',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'NAME': tmp_postgres.path.replace('/', ''),
+        'USER': tmp_postgres.username,
+        'PASSWORD': tmp_postgres.password,
+        'HOST': tmp_postgres.hostname,
+        'PORT': 5432,
+        'OPTIONS': dict(parse_qsl(tmp_postgres.query)),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
