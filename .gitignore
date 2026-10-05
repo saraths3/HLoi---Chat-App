@@ -1,6 +1,12 @@
-.venv/
 venv/
+.venv/
+
 db_*
 media/
+
 .env
 
+__pycache__/
+*.pyc
+
+staticfiles/
