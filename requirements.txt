@@ -16,6 +16,7 @@ daphne==4.2.3
 Django==6.1.1
 django-allauth==65.19.4
 django-cleanup==9.0.0
+django-stubs==6.1.1
 django-stubs-ext==6.1.1
 docstring-to-markdown==0.17
 hyperlink==21.0.0
@@ -42,7 +43,7 @@ python-decouple==3.8
 python-lsp-jsonrpc==1.1.2
 python-lsp-server==1.15.0
 pytokens==0.4.1
-redis==8.1.0
+redis==5.3.1
 requests==2.34.2
 service-identity==26.1.0
 sqlparse==0.6.0
