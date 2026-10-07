@@ -92,7 +92,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'allauth.account.middleware.AccountMiddleware',
-    'core.middleware.profile_required'
+    'core.middleware.profile_required',
 ]
 
 AUTHENTICATION_BACKENDS = [
