@@ -32,6 +32,10 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
 
 CSRF_TRUSTED_ORIGINS = [config('CSRF_TRUSTED_ORIGINS')]
 
+# Force Django to recognize HTTPS when deployed behind Render's proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
 # Application definition
 
 INSTALLED_APPS = [
