@@ -196,3 +196,17 @@ def alerts_view(request):
         'friend_requests': friend_requests
     }
     return render(request, 'core/alerts.html', context)
+
+@login_required(login_url='sign_in_page')
+def remove_friend(request, friend_id):
+    if request.method == 'POST':
+        friend_profile = get_object_or_404(Profile, id=friend_id)
+        user_profile = request.user.profile
+        friendship = Friendship.objects.filter(
+            Q(sender_profile=friend_profile, reciever_profile=user_profile) |
+            Q(sender_profile=user_profile, reciever_profile=friend_profile)
+        ).first()
+        if friendship:
+            friendship.delete()
+
+    return redirect('friends_page')

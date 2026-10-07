@@ -56,11 +56,15 @@
                         <h3 class="friend-name">{{ friend.name|default:friend.username }}</h3>
                         <span class="friend-username">@{{ friend.username }}</span>
                     </div>
-
-                    <a href="#" class="btn-chat" title="Remove Friend">
+                    <form method="post" action="{% url 'remove_friend' friend.id %}">
+                        {% csrf_token %}
+                    <button type="submit">
+                    <div class="btn-chat" title="Remove Friend">
                         <span class="material-symbols-outlined">Remove</span>
                         <span>Remove Friend</span>
-                    </a>
+                    </div>
+                    </form>
+                    </button>
                 </article>
                 {% endwith %}
             {% endfor %}

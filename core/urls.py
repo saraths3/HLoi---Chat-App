@@ -10,4 +10,5 @@ urlpatterns = [
     path('reject-request/<int:request_id>/', views.reject_fr, name='reject_fr'),
     path('friends/', views.friends_view, name='friends_page'),
     path('alerts/', views.alerts_view, name='alerts_page'),
+    path('friend/remove/<uuid:friend_id>', views.remove_friend, name='remove_friend'),
 ]
