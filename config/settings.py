@@ -37,8 +37,9 @@ CSRF_TRUSTED_ORIGINS = [config('CSRF_TRUSTED_ORIGINS')]
 INSTALLED_APPS = [
     'daphne',
     'channels',
+    # 'cloudinary_storage',
     'cloudinary',
-    'cloudinary_storage',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -207,6 +208,17 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
+# Modern Django Storage Configuration (Django 4.2+)
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
