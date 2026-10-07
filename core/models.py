@@ -3,6 +3,7 @@ from uuid import uuid4
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from cloudinary_storage.storage import MediaCloudinaryStorage
 
 User = settings.AUTH_USER_MODEL
 
@@ -10,7 +11,7 @@ User = settings.AUTH_USER_MODEL
 class Profile(models.Model):
     id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    avatar = models.ImageField(upload_to='core/profile/', blank=True, null=True)
+    avatar = models.ImageField(storage = MediaCloudinaryStorage() ,upload_to='Profile/', blank=True, null=True)
     username = models.CharField(max_length=100, unique=True)
     name = models.CharField(max_length=100)
     bio = models.TextField(blank=True, default='')

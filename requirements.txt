@@ -10,12 +10,14 @@ channels==4.3.2
 channels_redis==4.3.0
 charset-normalizer==3.5.1
 click==8.5.0
+cloudinary==1.46.3
 constantly==23.10.4
 cryptography==50.0.1
 daphne==4.2.3
 Django==6.1.1
 django-allauth==65.19.4
 django-cleanup==9.0.0
+django-cloudinary-storage==0.3.0
 django-stubs==6.1.1
 django-stubs-ext==6.1.1
 docstring-to-markdown==0.17
@@ -47,6 +49,7 @@ pytokens==0.4.1
 redis==5.3.1
 requests==2.34.2
 service-identity==26.1.0
+six==1.17.0
 sqlparse==0.6.0
 Twisted==26.4.0
 txaio==26.6.1
@@ -54,5 +57,6 @@ types-PyYAML==6.0.12.20260906
 typing_extensions==4.16.0
 ujson==6.0.0
 urllib3==2.8.0
+whitenoise==6.12.0
 zipp==4.1.0
 zope.interface==8.6
